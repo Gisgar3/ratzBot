@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gavin Isgar",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "dependencies": {
     "discord-rpc": "^3.0.0-beta.11",
     "discord.js": "^11.3.2",
