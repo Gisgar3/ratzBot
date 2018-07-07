@@ -1,0 +1,16 @@
+{
+    "names": [
+        "/ratz showcommands",
+        "/ratz steamuserinfo",
+        "/ratz slimedog",
+        "/ratz discorduserinfo",
+        "/ratz botinfo"
+    ],
+    "definitions": [
+        "Shows all commands for ratzBot",
+        "Shows user information for provided Steam64 ID",
+        "Authorizes user to type in server chat after reading the rules",
+        "Shows user information for provided numerical Discord ID (not discriminator)",
+        "Shows all information about ratzBot"
+    ]
+}
