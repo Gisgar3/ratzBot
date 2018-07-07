@@ -129,7 +129,7 @@ bot.on('message', (message) => {
                 }
                 // -----TOPIC DETECTION AND REVIEW-----
                 if (message.content.includes("XXXTentacion") || message.content.includes("xxxtentacion") && message.content.includes("death") || message.content.includes("died")) {
-                    fs.appendFileSync("./exclude/bannedmessages.ratz", `(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}\n\n`);
+                    fs.appendFileSync("./exclude/bannedmessages.ratz", `\r\n(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}`);
                     message.delete();
                     message.channel.send(`${message.author}, your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.`);
                 }
@@ -138,7 +138,7 @@ bot.on('message', (message) => {
     }
     catch (err) {
         var date = new Date();
-        fs.appendFileSync("./exclude/errors.ratz", `ERROR at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}: ${err}\n`);
+        fs.appendFileSync("./exclude/errors.ratz", `\r\nERROR at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}: ${err}`);
     }
 })
 
@@ -151,8 +151,8 @@ bot.on("guildMemberRemove", (member) => {
 })
 
 bot.on("error", (error) => {
-    fs.appendFileSync("./exclude/errors.ratz", `ERROR at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}: ${error.name} | ${error.message}\n`);
+    fs.appendFileSync("./exclude/errors.ratz", `\r\nERROR at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}: ${error.name} | ${error.message}\n`);
 })
 
 
-bot.login(tokens.token);
+bot.login(tokens.bottoken);
