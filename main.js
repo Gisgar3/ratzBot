@@ -12,6 +12,7 @@ var tokens = require("./exclude/tokens.json");
 var fs = require("fs");
 const package = require("./package.json");
 const { app, BrowserWindow } = require('electron');
+var date = new Date();
 
 // -----CHANNELS-----
 var logChannel = "423939166401855518";
