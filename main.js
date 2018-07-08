@@ -129,7 +129,7 @@ bot.on('message', (message) => {
                     })
                 }
                 // -----TOPIC DETECTION AND REVIEW-----
-                if (message.content.includes("XXXTentacion") || message.content.includes("xxxtentacion") && message.content.includes("death") || message.content.includes("died")) {
+                if ((message.content.includes("XXXTentacion") || message.content.includes("xxxtentacion")) && (message.content.includes("death") || message.content.includes("died"))) {
                     fs.appendFileSync("./exclude/bannedmessages.ratz", `\r\n(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}`);
                     message.delete();
                     message.channel.send(`${message.author}, your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.`);
