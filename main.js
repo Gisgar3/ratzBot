@@ -98,6 +98,7 @@ bot.on('message', (message) => {
                         .addField("Developer", "Gavin Isgar (https://www.github.com/gisgar3/)")
                         .addField("Version Number", package.version)
                         .addField("Source Languages", "JavaScript\nTypeScript")
+                        .addField("GitHub Repository", "https://www.github.com/gisgar3/ratzbot/")
                     message.channel.send(embed);
                 }
                 if (message.content.startsWith("/ratz steamuserinfo ")) {
@@ -130,9 +131,14 @@ bot.on('message', (message) => {
                 }
                 // -----TOPIC DETECTION AND REVIEW-----
                 if ((message.content.includes("XXXTentacion") || message.content.includes("xxxtentacion")) && (message.content.includes("death") || message.content.includes("died"))) {
-                    fs.appendFileSync("./exclude/bannedmessages.ratz", `\r\n(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}`);
-                    message.delete();
-                    message.channel.send(`${message.author}, your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.`);
+                    if (fs.readFileSync("./exclude/approvedmessages.ratz").includes(message.content.toString())) {
+                        // Nothing
+                    }
+                    else {
+                        fs.appendFileSync("./exclude/bannedmessages.ratz", `\r\n(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}`);
+                        message.delete();
+                        message.channel.send(`${message.author}, your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.`);
+                    }
                 }
             }
         }
