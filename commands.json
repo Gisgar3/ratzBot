@@ -1,9 +1,9 @@
 {
     "names": [
         "/ratz showcommands",
-        "/ratz steamuserinfo",
+        "/ratz steamuserinfo + Steam64ID",
         "/ratz slimedog",
-        "/ratz discorduserinfo",
+        "/ratz discorduserinfo + UserID",
         "/ratz botinfo"
     ],
     "definitions": [
