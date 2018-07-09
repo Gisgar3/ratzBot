@@ -1,6 +1,6 @@
 {
   "name": "ratzbot",
-  "version": "2.2.6",
+  "version": "2.3.0",
   "description": "Discord bot for Twitch streamer ratzDoll",
   "main": "main.js",
   "scripts": {

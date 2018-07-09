@@ -129,6 +129,39 @@ bot.on('message', (message) => {
                         }
                     })
                 }
+                if (message.content.toString() == "/ratz releaseinfo") {
+                    var getReleaseInfo = {
+                        method: "GET",
+                        url: `https://api.github.com/repos/Gisgar3/ratzBot/releases/latest`,
+                        headers: {
+                            "User-Agent": "Gisgar3"
+                        }
+                    }
+                    request(getReleaseInfo, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                var embed = new Discord.RichEmbed()
+                                .setTitle("ratzBot GitHub Release Information")
+                                .setThumbnail(bot.user.avatarURL)
+                                .setColor(0xcb00ff)
+                                .setURL(stats.html_url)
+                                .addField(`Latest Release`, "" + stats.name)
+                                .addField(`Release Branch`, "" + stats.target_commitish)
+                                .addField(`Tag`, stats.tag_name)
+                                .addField(`Pre-Release Status`, "" + stats.prerelease)
+                                .addField(`Author`, stats.author.login)
+                                message.channel.send(embed);
+                            }
+                            else {
+                                message.channel.send(`${error} + ${response.statusCode}`);
+                            }
+                        }
+                        catch (err) {
+                            console.log(`ERROR: ${err}`);
+                        }
+                    })
+                }
                 // -----TOPIC DETECTION AND REVIEW-----
                 if ((message.content.includes("XXXTentacion") || message.content.includes("xxxtentacion")) && (message.content.includes("death") || message.content.includes("died"))) {
                     if (fs.readFileSync("./exclude/approvedmessages.ratz").includes(message.content.toString())) {
