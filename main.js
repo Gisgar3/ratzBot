@@ -43,14 +43,19 @@ bot.on('message', (message) => {
         }
         else {
             if (fs.readFileSync("./exclude/users.ratz").includes(message.author.id.toString()) == false) {
-                if (message.content.toString() == "/ratz slimedog") {
-                    fs.appendFileSync("./exclude/users.ratz", `\r\n${message.author.id.toString()}`);
-                    message.delete();
-                    message.channel.send(`${message.author}, you now have access to type in the server!`);
+                if (message.author.username == "GitHub" && message.author.bot == 1) {
+
                 }
                 else {
-                    message.delete();
-                    message.channel.send(`${message.author}, you have not completely read the rules in order to have access to chat. To get access, re-read the rules and type the secret response message specified.`)
+                    if (message.content.toString() == "/ratz slimedog") {
+                        fs.appendFileSync("./exclude/users.ratz", `\r\n${message.author.id.toString()}`);
+                        message.delete();
+                        message.channel.send(`${message.author}, you now have access to type in the server!`);
+                    }
+                    else {
+                        message.delete();
+                        message.channel.send(`${message.author}, you have not completely read the rules in order to have access to chat. To get access, re-read the rules and type the secret response message specified.`)
+                    }
                 }
             }
             else {
@@ -142,15 +147,15 @@ bot.on('message', (message) => {
                             if (!error & response.statusCode == 200) {
                                 var stats = JSON.parse(body);
                                 var embed = new Discord.RichEmbed()
-                                .setTitle("ratzBot GitHub Release Information")
-                                .setThumbnail(bot.user.avatarURL)
-                                .setColor(0xcb00ff)
-                                .setURL(stats.html_url)
-                                .addField(`Latest Release`, "" + stats.name)
-                                .addField(`Release Branch`, "" + stats.target_commitish)
-                                .addField(`Tag`, stats.tag_name)
-                                .addField(`Pre-Release Status`, "" + stats.prerelease)
-                                .addField(`Author`, stats.author.login)
+                                    .setTitle("ratzBot GitHub Release Information")
+                                    .setThumbnail(bot.user.avatarURL)
+                                    .setColor(0xcb00ff)
+                                    .setURL(stats.html_url)
+                                    .addField(`Latest Release`, "" + stats.name)
+                                    .addField(`Release Branch`, "" + stats.target_commitish)
+                                    .addField(`Tag`, stats.tag_name)
+                                    .addField(`Pre-Release Status`, "" + stats.prerelease)
+                                    .addField(`Author`, stats.author.login)
                                 message.channel.send(embed);
                             }
                             else {
