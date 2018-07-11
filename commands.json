@@ -5,7 +5,9 @@
         "/ratz slimedog",
         "/ratz discorduserinfo + UserID",
         "/ratz botinfo",
-        "/ratz releaseinfo"
+        "/ratz releaseinfo",
+        "/ratz play + YouTube URL",
+        "/ratz stop"
     ],
     "definitions": [
         "Shows all commands for ratzBot",
@@ -13,6 +15,8 @@
         "Authorizes user to type in server chat after reading the rules",
         "Shows user information for provided numerical Discord ID (not discriminator)",
         "Shows all information about ratzBot",
-        "Shows the latest release information of ratzBot"
+        "Shows the latest release information of ratzBot",
+        "Plays YouTube video audio",
+        "Stops YouTube video audio"
     ]
 }

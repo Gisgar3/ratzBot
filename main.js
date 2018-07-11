@@ -1,5 +1,10 @@
+// COPYRIGHT (C) GAVIN ISGAR 2017-2018
+
 const Discord = require("discord.js");
 const DiscordRPC = require("discord-rpc");
+const opus = require("opusscript");
+const ffmpeg = require("ffmpeg-binaries");
+const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 const msg = new Discord.Message();
 var net = require('net');
@@ -166,6 +171,43 @@ bot.on('message', (message) => {
                             console.log(`ERROR: ${err}`);
                         }
                     })
+                }
+                // -----VOICE CHANNELS-----
+                if (message.content.startsWith("/ratz play ")) {
+                    var result = message.content.slice(11);
+                    if (message.member.voiceChannel) {
+                        message.member.voiceChannel.join().then(connection => {
+                            try {
+                                const stream = ytdl(result, { filter: `audioonly` });
+                                const dispatcher = connection.playStream(stream);
+                                message.channel.send(`${message.author}, your music is now playing.`);
+                                dispatcher.on("end", end => {
+                                    message.channel.send(`${message.author}, your music has ended.`);
+                                    message.member.voiceChannel.leave();
+                                })
+                            }
+                            catch (err) {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                            }
+                        })
+                    }
+                    else {
+                        message.channel.send(`${message.author}, you are not in a voice channel. Join a voice channel to play music!`);
+                    }
+                }
+                if (message.content.toString() == "/ratz stop") {
+                    if (message.member.voiceChannel) {
+                        try {
+                            message.member.voiceChannel.connection.disconnect()
+                            message.member.voiceChannel.leave();
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    }
+                    else {
+                        message.channel.send(`${message.author}, you are not in a voice channel.`);
+                    }
                 }
                 // -----TOPIC DETECTION AND REVIEW-----
                 if ((message.content.includes("XXXTentacion") || message.content.includes("xxxtentacion")) && (message.content.includes("death") || message.content.includes("died"))) {
