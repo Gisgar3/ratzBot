@@ -58,6 +58,7 @@ bot.on('message', (message) => {
                         message.channel.send(`${message.author}, you now have access to type in the server!`);
                     }
                     else {
+                        fs.appendFileSync("./exclude/removedauthmessages.ratz", `\r\n(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}`);
                         message.delete();
                         message.channel.send(`${message.author}, you have not completely read the rules in order to have access to chat. To get access, re-read the rules and type the secret response message specified.`)
                     }
