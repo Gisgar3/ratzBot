@@ -169,7 +169,58 @@ bot.on('message', (message) => {
                             }
                         }
                         catch (err) {
-                            console.log(`ERROR: ${err}`);
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    })
+                }
+                if (message.content.toString() == "/ratz btcinfo") {
+                    var getBTCInfo = {
+                        method: "GET",
+                        url: "https://api.blockchain.info/stats"
+                    }
+                    request(getBTCInfo, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                const embed = new Discord.RichEmbed()
+                                    .setTitle("BTC Information")
+                                    .setColor(0xcb00ff)
+                                    .setThumbnail(bot.user.avatarURL)
+                                    .addField("Market Price (USD)", `$${stats.market_price_usd}`)
+                                    .addField("BTC Mined", stats.n_btc_mined)
+                                    .addField("Blocks Mined", stats.n_blocks_mined)
+                                    .addField("Total Blocks", stats.n_blocks_total)
+                                    .addField("Total BTC Sent", stats.total_btc_sent)
+                                message.channel.send(embed);
+                            }
+                            else {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                            }
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    })
+                }
+                // -----STREAMLABS INTEGRATION
+                if (message.content.startsWith("/ratz ratcoininfo ")) {
+                    var result = message.content.slice(18);
+                    var getRTCInfo = {
+                        method: "GET",
+                        url: `https://streamlabs.com/api/v1.0/points?access_token=${tokens.streamlabstoken}&username=${result}&channel=ratzdoll`
+                    }
+                    request(getRTCInfo, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                message.channel.send(`${message.author}, ${result} has ${stats.points} RTC!`);
+                            }
+                            else {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                            }
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
                         }
                     })
                 }
