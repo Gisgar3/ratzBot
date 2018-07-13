@@ -202,7 +202,7 @@ bot.on('message', (message) => {
                         }
                     })
                 }
-                // -----STREAMLABS INTEGRATION
+                // -----STREAMLABS INTEGRATION-----
                 if (message.content.startsWith("/ratz ratcoininfo ")) {
                     var result = message.content.slice(18);
                     var getRTCInfo = {
@@ -214,6 +214,39 @@ bot.on('message', (message) => {
                             if (!error & response.statusCode == 200) {
                                 var stats = JSON.parse(body);
                                 message.channel.send(`${message.author}, ${result} has ${stats.points} RTC!`);
+                            }
+                            else {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                            }
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    })
+                }
+                // -----TWITCH NEW API-----
+                if (message.content.toString() == "/ratz laststream") {
+                    var getStreamVOD = {
+                        method: 'GET',
+                        url: `https://api.twitch.tv/helix/videos?user_id=157901049&first=1`,
+                        headers: {
+                            "Client-ID": `${tokens.twitchapiclientid}`
+                        }
+                    }
+                    request(getStreamVOD, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                const embed = new Discord.RichEmbed()
+                                    .setTitle("Last Stream VOD from ratzDoll")
+                                    .setThumbnail(bot.user.avatarURL)
+                                    .setColor(0xcb00ff)
+                                    .setURL(stats.data[0].url)
+                                    .addField("Title", "" + stats.data[0].title)
+                                    .addField("Published At", "" + stats.data[0].published_at)
+                                    .addField("Duration", "" + stats.data[0].duration)
+                                    .addField("View Count", stats.data[0].view_count)
+                                message.channel.send(embed);
                             }
                             else {
                                 message.channel.send(`${message.author}, an error occured during the process. Try again later.`);

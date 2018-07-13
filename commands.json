@@ -9,7 +9,8 @@
         "/ratz play + YouTube URL",
         "/ratz stop",
         "/ratz btcinfo",
-        "/ratz ratcoininfo + Twitch Username"
+        "/ratz ratcoininfo + Twitch Username",
+        "/ratz laststream"
     ],
     "definitions": [
         "Shows all commands for ratzBot",
@@ -21,6 +22,7 @@
         "Plays YouTube video audio",
         "Stops YouTube video audio",
         "Shows information about Bitcoin",
-        "Shows the amount of RTC a user has on Twitch"
+        "Shows the amount of RTC a user has on Twitch",
+        "Shows last stream VOD and VOD information"
     ]
 }
