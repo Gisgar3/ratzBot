@@ -49,7 +49,7 @@ bot.on('message', (message) => {
         else {
             if (fs.readFileSync("./exclude/users.ratz").includes(message.author.id.toString()) == false) {
                 if (message.author.username == "GitHub" && message.author.bot == 1) {
-
+                    // Do nothing
                 }
                 else {
                     if (message.content.toString() == "/ratz slimedog") {
@@ -297,7 +297,7 @@ bot.on('message', (message) => {
                 // -----TOPIC DETECTION AND REVIEW-----
                 if ((message.content.includes("XXXTentacion") || message.content.includes("xxxtentacion")) && (message.content.includes("death") || message.content.includes("died"))) {
                     if (fs.readFileSync("./exclude/approvedmessages.ratz").includes(message.content.toString())) {
-                        // Nothing
+                        // Do nothing
                     }
                     else {
                         fs.appendFileSync("./exclude/bannedmessages.ratz", `\r\n(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}`);
