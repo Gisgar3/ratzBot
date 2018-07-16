@@ -10,7 +10,9 @@
         "/ratz stop",
         "/ratz btcinfo",
         "/ratz ratcoininfo + Twitch Username",
-        "/ratz laststream"
+        "/ratz laststream",
+        "/ratz gituserinfo + GitHub Username",
+        "/ratz gitrepoinfo + {GitHubUsername}/{RepositoryName}"
     ],
     "definitions": [
         "Shows all commands for ratzBot",
@@ -23,6 +25,8 @@
         "Stops YouTube video audio",
         "Shows information about Bitcoin",
         "Shows the amount of RTC a user has on Twitch",
-        "Shows last stream VOD and VOD information"
+        "Shows last stream VOD and VOD information",
+        "Shows information for provided GitHub user",
+        "Show information for provided GitHub repository (which is owned by the provided GitHub username)"
     ]
 }

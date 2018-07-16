@@ -174,6 +174,76 @@ bot.on('message', (message) => {
                         }
                     })
                 }
+                if (message.content.startsWith("/ratz gituserinfo ")) {
+                    var result = message.content.slice(18);
+                    var getGitUserInfo = {
+                        method: "GET",
+                        url: `https://api.github.com/users/${result}`,
+                        headers: {
+                            "User-Agent": "Gisgar3"
+                        }
+                    }
+                    request(getGitUserInfo, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                const embed = new Discord.RichEmbed()
+                                    .setTitle(`GitHub User Information for ${result}`)
+                                    .setURL(stats.html_url)
+                                    .setColor(0xcb00ff)
+                                    .setThumbnail(stats.avatar_url)
+                                    .addField("Name", stats.name)
+                                    .addField("Company", "" + stats.company)
+                                    .addField("Bio", "" + stats.bio)
+                                    .addField("Location", "" + stats.location)
+                                    .addField("Email", "" + stats.email)
+                                    .addField("Hireable", "" + stats.hireable)
+                                    .addField("Public Repositories", stats.public_repos)
+                                message.channel.send(embed);
+                            }
+                            else {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                            }
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    })
+                }
+                if (message.content.startsWith("/ratz gitrepoinfo ")) {
+                    var result = message.content.slice(18);
+                    var getGitRepoInfo = {
+                        method: "GET",
+                        url: `https://api.github.com/repos/${result}`,
+                        headers: {
+                            'User-Agent': 'Gisgar3'
+                        }
+                    }
+                    request(getGitRepoInfo, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                const embed = new Discord.RichEmbed()
+                                    .setTitle(`GitHub Repository for ${result}`)
+                                    .setURL(stats.html_url)
+                                    .setColor(0xcb00ff)
+                                    .setThumbnail(stats.owner.avatar_url)
+                                    .addField("Name", stats.name)
+                                    .addField("Description", stats.description)
+                                    .addField("Owner", stats.owner.login)
+                                    .addField("Language", stats.language)
+                                    .addField("Archive Status", stats.archived)
+                                message.channel.send(embed);
+                            }
+                            else {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                            }
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    })
+                }
                 if (message.content.toString() == "/ratz btcinfo") {
                     var getBTCInfo = {
                         method: "GET",
