@@ -143,7 +143,7 @@ bot.on('message', (message) => {
                 if (message.content.toString() == "/ratz releaseinfo") {
                     var getReleaseInfo = {
                         method: "GET",
-                        url: `https://api.github.com/repos/Gisgar3/ratzBot/releases/latest`,
+                        url: `https://api.github.com/repos/Gisgar3/ratzBot/releases`,
                         headers: {
                             "User-Agent": "Gisgar3"
                         }
@@ -156,13 +156,13 @@ bot.on('message', (message) => {
                                     .setTitle("ratzBot GitHub Release Information")
                                     .setThumbnail(bot.user.avatarURL)
                                     .setColor(0xcb00ff)
-                                    .setURL(stats.html_url)
-                                    .addField(`Latest Release`, "" + stats.name)
-                                    .addField(`Release Branch`, "" + stats.target_commitish)
-                                    .addField(`Tag`, stats.tag_name)
-                                    .addField(`Changelog`, stats.body)
-                                    .addField(`Pre-Release Status`, "" + stats.prerelease)
-                                    .addField(`Author`, stats.author.login)
+                                    .setURL(stats[0].html_url)
+                                    .addField(`Latest Release`, "" + stats[0].name)
+                                    .addField(`Release Branch`, "" + stats[0].target_commitish)
+                                    .addField(`Tag`, stats[0].tag_name)
+                                    .addField(`Changelog`, stats[0].body)
+                                    .addField(`Pre-Release Status`, "" + stats[0].prerelease)
+                                    .addField(`Author`, stats[0].author.login)
                                 message.channel.send(embed);
                             }
                             else {
