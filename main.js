@@ -163,6 +163,12 @@ bot.on('message', (message) => {
                                     .addField(`Changelog`, stats[0].body)
                                     .addField(`Pre-Release Status`, "" + stats[0].prerelease)
                                     .addField(`Author`, stats[0].author.login)
+                                if (`${stats[0].prerelease}` == "true" && `${stats[0].tag_name}`.endsWith("-RC")) {
+                                    embed.setFooter("BUILD STAGE: Release Candidate");
+                                }
+                                else {
+                                    embed.setFooter("BUILD STAGE: General Availability");
+                                }
                                 message.channel.send(embed);
                             }
                             else {
