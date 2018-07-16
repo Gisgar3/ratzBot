@@ -160,6 +160,7 @@ bot.on('message', (message) => {
                                     .addField(`Latest Release`, "" + stats.name)
                                     .addField(`Release Branch`, "" + stats.target_commitish)
                                     .addField(`Tag`, stats.tag_name)
+                                    .addField(`Changelog`, stats.body)
                                     .addField(`Pre-Release Status`, "" + stats.prerelease)
                                     .addField(`Author`, stats.author.login)
                                 message.channel.send(embed);
