@@ -166,7 +166,13 @@ bot.on('message', (message) => {
                                 if (`${stats[0].prerelease}` == "true" && `${stats[0].tag_name}`.endsWith("-RC")) {
                                     embed.setFooter("BUILD STAGE: Release Candidate");
                                 }
-                                else {
+                                else if (`${stats[0].prerelease}` == "true" && `${stats[0].tag_name}`.endsWith("-Beta")) {
+                                    embed.setFooter("BUILD STAGE: Beta");
+                                }
+                                else if (`${stats[0].prerelease}` == "true" && `${stats[0].tag_name}`.endsWith("-Alpha")) {
+                                    embed.setFooter("BUILD STAGE: Alpha");
+                                }
+                                else if (`${stats[0].prerelease}` == "false") {
                                     embed.setFooter("BUILD STAGE: General Availability");
                                 }
                                 message.channel.send(embed);
