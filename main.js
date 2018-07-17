@@ -143,7 +143,7 @@ bot.on('message', (message) => {
                 if (message.content.toString() == "/ratz releaseinfo") {
                     var getReleaseInfo = {
                         method: "GET",
-                        url: `https://api.github.com/repos/Gisgar3/ratzBot/releases/latest`,
+                        url: `https://api.github.com/repos/Gisgar3/ratzBot/releases`,
                         headers: {
                             "User-Agent": "Gisgar3"
                         }
@@ -156,16 +156,99 @@ bot.on('message', (message) => {
                                     .setTitle("ratzBot GitHub Release Information")
                                     .setThumbnail(bot.user.avatarURL)
                                     .setColor(0xcb00ff)
-                                    .setURL(stats.html_url)
-                                    .addField(`Latest Release`, "" + stats.name)
-                                    .addField(`Release Branch`, "" + stats.target_commitish)
-                                    .addField(`Tag`, stats.tag_name)
-                                    .addField(`Pre-Release Status`, "" + stats.prerelease)
-                                    .addField(`Author`, stats.author.login)
+                                    .setURL(stats[0].html_url)
+                                    .addField(`Latest Release`, "" + stats[0].name)
+                                    .addField(`Release Branch`, "" + stats[0].target_commitish)
+                                    .addField(`Tag`, stats[0].tag_name)
+                                    .addField(`Changelog`, stats[0].body)
+                                    .addField(`Pre-Release Status`, "" + stats[0].prerelease)
+                                    .addField(`Author`, stats[0].author.login)
+                                if (`${stats[0].prerelease}` == "true" && `${stats[0].tag_name}`.endsWith("-RC")) {
+                                    embed.setFooter("BUILD STAGE: Release Candidate");
+                                }
+                                else if (`${stats[0].prerelease}` == "true" && `${stats[0].tag_name}`.endsWith("-Beta")) {
+                                    embed.setFooter("BUILD STAGE: Beta");
+                                }
+                                else if (`${stats[0].prerelease}` == "true" && `${stats[0].tag_name}`.endsWith("-Alpha")) {
+                                    embed.setFooter("BUILD STAGE: Alpha");
+                                }
+                                else if (`${stats[0].prerelease}` == "false") {
+                                    embed.setFooter("BUILD STAGE: General Availability");
+                                }
                                 message.channel.send(embed);
                             }
                             else {
                                 message.channel.send(`${error} + ${response.statusCode}`);
+                            }
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    })
+                }
+                if (message.content.startsWith("/ratz gituserinfo ")) {
+                    var result = message.content.slice(18);
+                    var getGitUserInfo = {
+                        method: "GET",
+                        url: `https://api.github.com/users/${result}`,
+                        headers: {
+                            "User-Agent": "Gisgar3"
+                        }
+                    }
+                    request(getGitUserInfo, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                const embed = new Discord.RichEmbed()
+                                    .setTitle(`GitHub User Information for ${result}`)
+                                    .setURL(stats.html_url)
+                                    .setColor(0xcb00ff)
+                                    .setThumbnail(stats.avatar_url)
+                                    .addField("Name", stats.name)
+                                    .addField("Company", "" + stats.company)
+                                    .addField("Bio", "" + stats.bio)
+                                    .addField("Location", "" + stats.location)
+                                    .addField("Email", "" + stats.email)
+                                    .addField("Hireable", "" + stats.hireable)
+                                    .addField("Public Repositories", stats.public_repos)
+                                message.channel.send(embed);
+                            }
+                            else {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                            }
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    })
+                }
+                if (message.content.startsWith("/ratz gitrepoinfo ")) {
+                    var result = message.content.slice(18);
+                    var getGitRepoInfo = {
+                        method: "GET",
+                        url: `https://api.github.com/repos/${result}`,
+                        headers: {
+                            'User-Agent': 'Gisgar3'
+                        }
+                    }
+                    request(getGitRepoInfo, (error, response, body) => {
+                        try {
+                            if (!error & response.statusCode == 200) {
+                                var stats = JSON.parse(body);
+                                const embed = new Discord.RichEmbed()
+                                    .setTitle(`GitHub Repository for ${result}`)
+                                    .setURL(stats.html_url)
+                                    .setColor(0xcb00ff)
+                                    .setThumbnail(stats.owner.avatar_url)
+                                    .addField("Name", stats.name)
+                                    .addField("Description", stats.description)
+                                    .addField("Owner", stats.owner.login)
+                                    .addField("Language", stats.language)
+                                    .addField("Archive Status", stats.archived)
+                                message.channel.send(embed);
+                            }
+                            else {
+                                message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
                             }
                         }
                         catch (err) {
