@@ -20,6 +20,10 @@ const package = require("./package.json");
 const { app, BrowserWindow } = require('electron');
 var date = new Date();
 
+//-----SERVER EVENTS-----
+var activeevent = "";
+// ---------
+
 // -----CHANNELS-----
 var logChannel = "423939166401855518";
 var newcomerChannel = "423937750937501697";
@@ -271,6 +275,29 @@ bot.on('message', (message) => {
                         }
                     })
                 }
+                // -----SERVER EVENTS-----
+                if (message.content.toString() == "/ratz joinactiveevent") {
+                    if (activeevent == "") {
+                        message.channel.send(`${message.author}, there is no active event on the server.`);
+                    }
+                    else {
+                        try {
+                            fs.appendFileSync("./exclude/eventuserlist.ratz", `\r\n${message.author.id}`);
+                            message.channel.send(`${message.author}, you are now joined into the ${activeevent}!`);
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    }
+                }
+                if (message.content.toString() == "/ratz showactiveevent") {
+                    if (activeevent == "") {
+                        message.channel.send(`${message.author}, there is no active event on the server.`);
+                    }
+                    else {
+                        message.channel.send(`${message.author}, the active event on the server is the ${activeevent}.`);
+                    }
+                }
                 // -----STREAMLABS INTEGRATION-----
                 if (message.content.startsWith("/ratz ratcoininfo ")) {
                     var result = message.content.slice(18);
@@ -448,6 +475,12 @@ rl.on("line", (input) => {
         catch (err) {
             console.log(`**ERROR**: ${err}`);
         }
+    }
+    // -----SERVER EVENTS-----
+    if (input.toString().startsWith("/ratz setevent ")) {
+        var result = input.slice(15);
+        activeevent = result;
+        console.log(`**EVENT**: Event has been set.`);
     }
 })
 
