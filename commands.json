@@ -12,7 +12,9 @@
         "/ratz ratcoininfo + Twitch Username",
         "/ratz laststream",
         "/ratz gituserinfo + GitHub Username",
-        "/ratz gitrepoinfo + {GitHubUsername}/{RepositoryName}"
+        "/ratz gitrepoinfo + {GitHubUsername}/{RepositoryName}",
+        "/ratz showactiveevent",
+        "/ratz joinactiveevent"
     ],
     "definitions": [
         "Shows all commands for ratzBot",
@@ -27,6 +29,8 @@
         "Shows the amount of RTC a user has on Twitch",
         "Shows last stream VOD and VOD information",
         "Shows information for provided GitHub user",
-        "Show information for provided GitHub repository (which is owned by the provided GitHub username)"
+        "Show information for provided GitHub repository (which is owned by the provided GitHub username)",
+        "Shows active server event",
+        "Join active server event"
     ]
 }

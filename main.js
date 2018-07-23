@@ -15,30 +15,20 @@ var request = require("request");
 var commands = require("./commands.json");
 var tokens = require("./exclude/tokens.json");
 var fs = require("fs");
+const readline = require("readline");
 const package = require("./package.json");
 const { app, BrowserWindow } = require('electron');
 var date = new Date();
 
+//-----SERVER EVENTS-----
+var activeevent = "";
+// ---------
+
 // -----CHANNELS-----
 var logChannel = "423939166401855518";
 var newcomerChannel = "423937750937501697";
+var mainChannel = "443227379712917505";
 // ----------
-
-function createWindow() {
-    var win = new BrowserWindow({ width: 1300, height: 800, frame: false })
-    win.on('closed', () => {
-        win = null
-    })
-    win.show();
-    win.setTitle("ratzBot Server");
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, "main.html"),
-        protocol: "file",
-        slashes: true
-    }))
-}
-
-app.on(`ready`, createWindow);
 
 bot.on('message', (message) => {
     try {
@@ -285,6 +275,29 @@ bot.on('message', (message) => {
                         }
                     })
                 }
+                // -----SERVER EVENTS-----
+                if (message.content.toString() == "/ratz joinactiveevent") {
+                    if (activeevent == "") {
+                        message.channel.send(`${message.author}, there is no active event on the server.`);
+                    }
+                    else {
+                        try {
+                            fs.appendFileSync("./exclude/eventuserlist.ratz", `\r\n${message.author.id}`);
+                            message.channel.send(`${message.author}, you are now joined into the ${activeevent}!`);
+                        }
+                        catch (err) {
+                            message.channel.send(`${message.author}, an error occured during the process. Try again later.`);
+                        }
+                    }
+                }
+                if (message.content.toString() == "/ratz showactiveevent") {
+                    if (activeevent == "") {
+                        message.channel.send(`${message.author}, there is no active event on the server.`);
+                    }
+                    else {
+                        message.channel.send(`${message.author}, the active event on the server is the ${activeevent}.`);
+                    }
+                }
                 // -----STREAMLABS INTEGRATION-----
                 if (message.content.startsWith("/ratz ratcoininfo ")) {
                     var result = message.content.slice(18);
@@ -388,6 +401,11 @@ bot.on('message', (message) => {
                         message.channel.send(`${message.author}, your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.`);
                     }
                 }
+                if (message.content.includes("NIGGER") || message.content.includes("nigger") || message.content.includes("NIGGA") || message.content.includes("nigga")) {
+                    fs.appendFileSync("./exclude/bannedmessages.ratz", `\r\n(${message.author.username} [${message.author.id}], ${message.createdTimestamp}) ${message.content.toString()}`);
+                    message.delete();
+                    message.channel.send(`${message.author}, your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.`);
+                }
             }
         }
     }
@@ -407,6 +425,63 @@ bot.on("guildMemberRemove", (member) => {
 
 bot.on("error", (error) => {
     fs.appendFileSync("./exclude/errors.ratz", `\r\nERROR at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getMonth()}/${date.getDate()}/${date.getFullYear()}: ${error.name} | ${error.message}\n`);
+})
+
+bot.on("disconnect", (userconnection) => {
+    try {
+        bot.login(tokens.bottoken);
+    }
+    catch (err) {
+        console.log(`**RECON. ERROR**: ${err}`);
+    }
+})
+
+// -----READLINE-----
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+rl.on("line", (input) => {
+    if (input.toString().startsWith("/ratz userban ")) {
+        var result = input.slice(14);
+        try {
+            bot.guilds.forEach(function (getGuilds) {
+                if (getGuilds.name == "ratzcord") {
+                    getGuilds.members.forEach(function (getMembers) {
+                        if (getMembers.id == `${result}`) {
+                            getMembers.ban("Banned by ratzBot system.");
+                            console.log(`**BAN**: User ${result} was successfully banned.`);
+                        }
+                        else {
+                            // Do nothing
+                        }
+                    })
+                }
+                else {
+                    // Do nothing
+                }
+            })
+        }
+        catch (err) {
+            console.log(`**ERROR**: ${err}`);
+        }
+    }
+    if (input.toString().startsWith("/ratz writemain ")) {
+        var result = input.slice(16);
+        try {
+            bot.channels.get(mainChannel).send(`${result}`);
+        }
+        catch (err) {
+            console.log(`**ERROR**: ${err}`);
+        }
+    }
+    // -----SERVER EVENTS-----
+    if (input.toString().startsWith("/ratz setevent ")) {
+        var result = input.slice(15);
+        activeevent = result;
+        console.log(`**EVENT**: Event has been set.`);
+    }
 })
 
 
