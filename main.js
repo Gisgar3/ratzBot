@@ -69,6 +69,7 @@ bot.on('message', function (message) {
                     }
                     catch (err) {
                         message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000008));
+                        appendError(TYPE.BACKEND, ERROR.RATZx0000008, message.author.id);
                     }
                 }
                 if (message.content.toString() == "/ratz slimedog") {
@@ -122,10 +123,12 @@ bot.on('message', function (message) {
                             }
                             else {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000007));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000007, message.author.id);
                             }
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000007));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000007, message.author.id);
                         }
                     });
                 }
@@ -168,10 +171,12 @@ bot.on('message', function (message) {
                             }
                             else {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id);
                             }
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id);
                         }
                     });
                 }
@@ -204,10 +209,12 @@ bot.on('message', function (message) {
                             }
                             else {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id);
                             }
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id);
                         }
                     });
                 }
@@ -238,10 +245,12 @@ bot.on('message', function (message) {
                             }
                             else {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id);
                             }
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id);
                         }
                     });
                 }
@@ -267,10 +276,12 @@ bot.on('message', function (message) {
                             }
                             else {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000005));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000005, message.author.id);
                             }
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000005));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000005, message.author.id);
                         }
                     });
                 }
@@ -286,6 +297,7 @@ bot.on('message', function (message) {
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000004));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000004, message.author.id);
                         }
                     }
                 }
@@ -312,10 +324,12 @@ bot.on('message', function (message) {
                             }
                             else {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000003));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000003, message.author.id);
                             }
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000003));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000003, message.author.id);
                         }
                     });
                 }
@@ -345,10 +359,12 @@ bot.on('message', function (message) {
                             }
                             else {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000002));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000002, message.author.id);
                             }
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000002));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000002, message.author.id);
                         }
                     });
                 }
@@ -368,6 +384,7 @@ bot.on('message', function (message) {
                             }
                             catch (err) {
                                 message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000001));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000001, message.author.id);
                             }
                         });
                     }
@@ -383,6 +400,7 @@ bot.on('message', function (message) {
                         }
                         catch (err) {
                             message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000001));
+                            appendError(TYPE.BACKEND, ERROR.RATZx0000001, message.author.id);
                         }
                     }
                     else {
@@ -409,8 +427,7 @@ bot.on('message', function (message) {
         }
     }
     catch (err) {
-        var date = new Date();
-        fs.appendFileSync("./exclude/errors.ratz", "\r\nERROR at " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " " + date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear() + ": " + err);
+        appendError(TYPE.BACKEND, ERROR.RATZx0000009, "SYSTEM");
     }
 });
 bot.on("guildMemberAdd", function (member) {
@@ -488,6 +505,7 @@ var ERROR;
     ERROR["RATZx0000006"] = "RATZx0000006";
     ERROR["RATZx0000007"] = "RATZx0000007";
     ERROR["RATZx0000008"] = "RATZx0000008";
+    ERROR["RATZx0000009"] = "RATZx0000009";
 })(ERROR || (ERROR = {}));
 ;
 var TYPE;
@@ -500,4 +518,7 @@ function sendError(TYPE, ERROR) {
     this.type = TYPE;
     this.error = ERROR;
     return "An error occured during the process: **| " + TYPE + " | " + ERROR + " |**";
+}
+function appendError(TYPE, ERROR, USER) {
+    fs.appendFileSync("./exclude/errors.ratz", "ERROR CODE: " + ERROR + "\r\nERROR TYPE: " + TYPE + "\r\nUSER: " + USER + "\r\nRECEIVED: " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " " + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "\r\n\r\n");
 }
