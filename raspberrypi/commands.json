@@ -1,0 +1,38 @@
+{
+    "names": [
+        "/ratz showcommands",
+        "/ratz steamuserinfo + Steam64ID",
+        "/ratz slimedog",
+        "/ratz discorduserinfo + UserID",
+        "/ratz botinfo",
+        "/ratz releaseinfo",
+        "/ratz play + YouTube URL",
+        "/ratz stop",
+        "/ratz btcinfo",
+        "/ratz ratcoininfo + Twitch Username",
+        "/ratz laststream",
+        "/ratz gituserinfo + GitHub Username",
+        "/ratz gitrepoinfo + {GitHubUsername}/{RepositoryName}",
+        "/ratz showactiveevent",
+        "/ratz joinactiveevent",
+        "/ratz getremovedmessages [DM-Channel Command]"
+    ],
+    "definitions": [
+        "Shows all commands for ratzBot",
+        "Shows user information for provided Steam64 ID",
+        "Authorizes user to type in server chat after reading the rules",
+        "Shows user information for provided numerical Discord ID (not discriminator)",
+        "Shows all information about ratzBot",
+        "Shows the latest release information of ratzBot",
+        "Plays YouTube video audio",
+        "Stops YouTube video audio",
+        "Shows information about Bitcoin",
+        "Shows the amount of RTC a user has on Twitch",
+        "Shows last stream VOD and VOD information",
+        "Shows information for provided GitHub user",
+        "Show information for provided GitHub repository (which is owned by the provided GitHub username)",
+        "Shows active server event",
+        "Join active server event",
+        "Gets all removed messages that were created by the user; given by ratzBot in a DM-Channel"
+    ]
+}
