@@ -17,6 +17,7 @@ var commands = require("./commands.json");
 //var tokens = require("./exclude/tokens.json");
 var tokens = require("C:/Users/Gavin/Desktop/tokens.json");
 var fs = require("fs");
+var os = require("os");
 var readline = require("readline");
 var packagefile = require("./package.json");
 var _a = require('electron'), app = _a.app, BrowserWindow = _a.BrowserWindow;
@@ -208,6 +209,16 @@ bot.on('message', function (message) {
                                 appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id, err);
                             }
                         });
+                    }
+                    if (message.content.toString() == "/ratz machineinfo") {
+                        var embed = new Discord.RichEmbed()
+                            .setTitle("ratzBot Machine Information")
+                            .setDescription("Information of the current machine running **ratzBot**.")
+                            .setColor(0xcb00ff)
+                            .addField("Machine Architecture", os.arch().toString())
+                            .addField("Machine CPU", os.cpus().model.toString())
+                            .addField("OS Type", os.type().toString())
+                            .addField("Uptime", os.uptime().toString())
                     }
                     if (message.content.startsWith("/ratz gituserinfo ")) {
                         var result = message.content.slice(18);
