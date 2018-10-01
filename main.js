@@ -431,6 +431,33 @@ bot.on('message', function (message) {
                             }
                         });
                     }
+                    /* -----REDDIT API/CUSTOM-----
+                    STILL NEEDS AUTH VIA CODE IN TOKENS.JSON
+                    if (message.content.toString() == "/ratz motivationalquote") {
+                        var getNewReddit = {
+                            url: "https://www.reddit.com/api/v1/r/GetMotivated/new",
+                            method: "GET",
+                            headers: {
+                                "User-Agent": "windows:yMuEkegXP0k93A:v3.1.1 (by /u/Gisgar3)"
+                            }
+                        };
+                        request(getNewReddit, function (error, response, body) {
+                            try {
+                                if (!error && response.StatusCode == 200) {
+                                    var stats = JSON.parse(body);
+                                    message.channel.send(stats);
+                                }
+                                else {
+                                    message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000010));
+                                    appendError(TYPE.BACKEND, ERROR.RATZx0000010, message.author.id, error);
+                                }
+                            }
+                            catch (err) {
+                                message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000010));
+                                appendError(TYPE.BACKEND, ERROR.RATZx0000010, message.author.id, err);
+                            }
+                        });
+                    */
                     // -----VOICE CHANNELS-----
                     if (message.content.startsWith("/ratz play ")) {
                         var result = message.content.slice(11);
@@ -478,26 +505,24 @@ bot.on('message', function (message) {
                         else {
                             fs.appendFileSync("./exclude/bannedmessages.ratz", "\r\n(" + message.author.username + " [" + message.author.id + "], " + message.createdTimestamp + ") " + message.content.toString());
                             message["delete"]();
-                            removeMessage(message.content.toString(), message.author.id);
                             message.channel.send(message.author + ", your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.");
                         }
                     }
                     if (message.content.includes("NIGGER") || message.content.includes("nigger") || message.content.includes("NIGGA") || message.content.includes("nigga")) {
                         fs.appendFileSync("./exclude/bannedmessages.ratz", "\r\n(" + message.author.username + " [" + message.author.id + "], " + message.createdTimestamp + ") " + message.content.toString());
                         message["delete"]();
-                        removeMessage(message.content.toString(), message.author.id);
                         message.channel.send(message.author + ", your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.");
                     }
                     // --------------------------------
-                    if (message.content.startsWith("/ratz testdetermine")) {
+                    /*if (message.content.startsWith("/ratz testdetermine")) {
                         message.channel.send(teachAI());
-                    }
+                    }*/
                 }
             }
         }
     }
     catch (err) {
-        appendError(TYPE.BACKEND, ERROR.RATZx0000009, "SYSTEM", err);
+        appendError(TYPE.BACKEND, ERROR.RATZx0000009, "SYSTEM", err.toString());
     }
 });
 bot.on("guildMemberAdd", function (member) {
@@ -507,7 +532,7 @@ bot.on("guildMemberRemove", function (member) {
     bot.channels.get(newcomerChannel).send("**| GOODBYE |** " + member + " has left the server!");
 });
 bot.on("error", function (error) {
-    appendError(TYPE.BACKEND, ERROR.RATZx0000009, "SYSTEM", error);
+    appendError(TYPE.BACKEND, ERROR.RATZx0000009, "SYSTEM", error.toString());
 });
 bot.on("disconnect", function (userconnection) {
     try {
@@ -550,6 +575,9 @@ rl.on("line", function (input) {
             console.log("**ERROR**: " + err);
         }
     }
+    if (input.toString() == "/ratz clear") {
+        console.clear();
+    }
     if (input.toString().startsWith("/ratz writemain ")) {
         var result = input.slice(16);
         try {
@@ -579,6 +607,7 @@ var ERROR;
     ERROR["RATZx0000007"] = "RATZx0000007";
     ERROR["RATZx0000008"] = "RATZx0000008";
     ERROR["RATZx0000009"] = "RATZx0000009";
+    ERROR["RATZx0000010"] = "RATZx0000010";
 })(ERROR || (ERROR = {}));
 ;
 var TYPE;
