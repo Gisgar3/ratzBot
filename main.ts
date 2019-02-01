@@ -1,4 +1,4 @@
-// COPYRIGHT (C) GAVIN ISGAR 2017-2018
+// COPYRIGHT (C) GAVIN ISGAR 2017-2019
 
 var Discord = require("discord.js");
 var DiscordRPC = require("discord-rpc");
@@ -8,14 +8,15 @@ var ffmpeg = require("ffmpeg-binaries");
 var ytdl = require("ytdl-core");
 var bot = new Discord.Client();
 var msg = new Discord.Message();
+var { graphql, buildSchema } = require("graphql");
 var net = require('net');
 var http = require("http");
 var url = require("url");
 var path = require("path");
+var cryptog = require("crypto");
 var request = require("request");
 var commands = require("./commands.json");
-//var tokens = require("./exclude/tokens.json");
-var tokens = require("C:/Users/Gavin/Desktop/tokens.json");
+var tokens = require("./exclude/tokens.json");
 var fs = require("fs");
 var os = require("os");
 var readline = require("readline");
@@ -161,6 +162,21 @@ bot.on('message', function (message) {
                                 appendError(TYPE.BACKEND, ERROR.RATZx0000007, message.author.id, err);
                             }
                         });
+                    }
+                    if (message.content.toString() == "/ratz releaseinfo2") {
+                        var query = '{ repository(owner: \"Gisgar3\", name: \"ratzBot\") { issues(first: 2) { edges { node { bodyText } } } } }';
+                        request.post({
+                            url: "https://api.github.com/graphql",
+                            form: "{ \"query\": \"" + query + "\"}",
+                            headers: {
+                                "User-Agent": "Gisgar3",
+                                "Authorization": "bearer "
+                            }
+                        },
+                        function (err, httpResponse, body) {
+                            console.log(httpResponse);
+                        });
+                        
                     }
                     if (message.content.toString() == "/ratz releaseinfo") {
                         var getReleaseInfo = {
@@ -487,7 +503,7 @@ bot.on('message', function (message) {
                     }
                     if (message.content.includes("NIGGER") || message.content.includes("nigger") || message.content.includes("NIGGA") || message.content.includes("nigga")) {
                         fs.appendFileSync("./exclude/bannedmessages.ratz", "\r\n(" + message.author.username + " [" + message.author.id + "], " + message.createdTimestamp + ") " + message.content.toString());
-                        message["delete"]();        
+                        message["delete"]();
                         message.channel.send(message.author + ", your message was deleted because it possibly relates to a blocked topic. To appeal the deletion of your message, contact an administrator.");
                     }
                     // --------------------------------

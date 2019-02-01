@@ -15,7 +15,8 @@
         "/ratz gitrepoinfo + {GitHubUsername}/{RepositoryName}",
         "/ratz showactiveevent",
         "/ratz joinactiveevent",
-        "/ratz getremovedmessages [DM-Channel Command]"
+        "/ratz getremovedmessages [DM-Channel Command]",
+        "/ratz machineinfo"
     ],
     "definitions": [
         "Shows all commands for ratzBot",
@@ -33,6 +34,7 @@
         "Show information for provided GitHub repository (which is owned by the provided GitHub username)",
         "Shows active server event",
         "Join active server event",
-        "Gets all removed messages that were created by the user; given by ratzBot in a DM-Channel"
+        "Gets all removed messages that were created by the user; given by ratzBot in a DM-Channel",
+        "Gets all information regarding ratzBot's host machine"
     ]
 }

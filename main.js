@@ -1,4 +1,4 @@
-// COPYRIGHT (C) GAVIN ISGAR 2017-2018
+// COPYRIGHT (C) GAVIN ISGAR 2017-2019
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -46,10 +46,10 @@ var net = require('net');
 var http = require("http");
 var url = require("url");
 var path = require("path");
+var cryptog = require("crypto");
 var request = require("request");
 var commands = require("./commands.json");
-//var tokens = require("./exclude/tokens.json");
-var tokens = require("C:/Users/Gavin/Desktop/tokens.json");
+var tokens = require("./exclude/tokens.json");
 var fs = require("fs");
 var os = require("os");
 var readline = require("readline");
@@ -197,52 +197,50 @@ bot.on('message', function (message) {
                         });
                     }
                     if (message.content.toString() == "/ratz releaseinfo") {
-                        var getReleaseInfo = {
-                            method: "GET",
-                            url: "https://api.github.com/repos/Gisgar3/ratzBot/releases",
-                            headers: {
-                                "User-Agent": "Gisgar3"
-                            }
-                        };
-                        request(getReleaseInfo, function (error, response, body) {
-                            try {
-                                if (!error && response.statusCode == 200) {
-                                    var stats = JSON.parse(body);
+                        try {
+                            request.post({
+                                url: "https://api.github.com/graphql",
+                                json: true,
+                                body: {"query": "query { repository(owner: \"Gisgar3\", name: \"ratzBot\") { releases(last: 1) {nodes {author {name login avatarUrl} url tagName name publishedAt isPrerelease description} } } }"},
+                                headers: {
+                                    "User-Agent": "Gisgar3",
+                                    "Authorization": `bearer ${tokens.githubpersonaltoken}`
+                                }
+                            }, function (err, httpResponse, body) {
+                                if (!err && httpResponse.statusCode == 200) {
                                     var embed = new Discord.RichEmbed()
                                         .setTitle("ratzBot GitHub Release Information")
                                         .setThumbnail(bot.user.avatarURL)
                                         .setColor(0xcb00ff)
-                                        .setURL(stats[0].html_url)
-                                        .addField("Latest Release", "" + stats[0].name)
-                                        .addField("Release Branch", "" + stats[0].target_commitish)
-                                        .addField("Tag", stats[0].tag_name)
-                                        .addField("Changelog", stats[0].body)
-                                        .addField("Pre-Release Status", "" + stats[0].prerelease)
-                                        .addField("Author", stats[0].author.login);
-                                    if ("" + stats[0].prerelease == "true" && ("" + stats[0].tag_name).endsWith("-RC")) {
-                                        embed.setFooter("BUILD STAGE: Release Candidate");
+                                        .setURL(body.data.repository.releases.nodes[0].url)
+                                        .addField("Latest Release", body.data.repository.releases.nodes[0].name)
+                                        .addField("Tag", body.data.repository.releases.nodes[0].tagName)
+                                        .addField("Changelog", body.data.repository.releases.nodes[0].description)
+                                        .addField("Pre-Release Status", body.data.repository.releases.nodes[0].isPrerelease)
+                                        .addField("Author", `${body.data.repository.releases.nodes[0].author.name} (${body.data.repository.releases.nodes[0].author.login})`);
+                                    if (body.data.repository.releases.nodes[0].isPrerelease == true && body.data.repository.releases.nodes[0].tagName.endsWith("-RC")) {
+                                        embed.setFooter("BUILD STAGE: Release Candidate", body.data.repository.releases.nodes[0].author.avatarUrl);
                                     }
-                                    else if ("" + stats[0].prerelease == "true" && ("" + stats[0].tag_name).endsWith("-Beta")) {
-                                        embed.setFooter("BUILD STAGE: Beta");
+                                    else if (body.data.repository.releases.nodes[0].isPrerelease == true && body.data.repository.releases.nodes[0].tagName.endsWith("-Beta")) {
+                                        embed.setFooter("BUILD STAGE: Beta", body.data.repository.releases.nodes[0].author.avatarUrl);
                                     }
-                                    else if ("" + stats[0].prerelease == "true" && ("" + stats[0].tag_name).endsWith("-Alpha")) {
-                                        embed.setFooter("BUILD STAGE: Alpha");
+                                    else if (body.data.repository.releases.nodes[0].isPrerelease == true && body.data.repository.releases.nodes[0].tagName.endsWith("-Alpha")) {
+                                        embed.setFooter("BUILD STAGE: Alpha", body.data.repository.releases.nodes[0].author.avatarUrl);
                                     }
-                                    else if ("" + stats[0].prerelease == "false") {
-                                        embed.setFooter("BUILD STAGE: General Availability");
+                                    else if (body.data.repository.releases.nodes[0].isPrerelease == false) {
+                                        embed.setFooter("BUILD STAGE: General Availability", body.data.repository.releases.nodes[0].author.avatarUrl);
                                     }
                                     message.channel.send(embed);
-                                }
+                                } 
                                 else {
-                                    message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
-                                    appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id, error);
+                                    sendError(TYPE.BACKEND, RATZx0000006);
+                                    appendError(TYPE.BACKEND, RATZx0000006, message.author.id, err);
                                 }
-                            }
-                            catch (err) {
-                                message.channel.send(sendError(TYPE.BACKEND, ERROR.RATZx0000006));
-                                appendError(TYPE.BACKEND, ERROR.RATZx0000006, message.author.id, err);
-                            }
-                        });
+                            });
+                        }
+                        catch (err) {
+                            appendError(TYPE.BACKEND, RATZx0000006, "SYSTEM", err)
+                        }
                     }
                     if (message.content.toString() == "/ratz machineinfo") {
                         var embed = new Discord.RichEmbed()
