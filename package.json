@@ -10,7 +10,7 @@
   "author": "Gavin Isgar",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@tensorflow/tfjs": "^0.12.4",
+    "@tensorflow/tfjs": "^4.22.0",
     "discord-rpc": "^3.0.0-beta.11",
     "discord.js": "^11.3.2",
     "ffmpeg-binaries": "^4.0.0",
